@@ -1,6 +1,6 @@
 # 00 Getting & Reading Raw Data
 
-## Downloading Source Data Pack
+## Downloading source data pack
 
 if (!file.exists("getdata")) {
         dir.create("getdata")
@@ -9,11 +9,11 @@ if (!file.exists("getdata")) {
 fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 download.file(fileUrl, destfile = "getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip", method = "curl")
 
-## Unziping Source Data Pack
+## Unziping the source data pack
 
 unzip("getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
 
-## Reading Relevant Data from Pack
+## Reading relevant data from the pack
 
 subject_train <- read.table("UCI HAR Dataset/train/subject_train.txt")
 x_train <- read.table("UCI HAR Dataset/train/X_train.txt") 
@@ -51,7 +51,6 @@ x_test <- cbind(y_test, x_test)
 ## Merging training and test data sets to create one
 
 merged <- rbind(x_train, x_test)
-View(merged)
 
 # 02 Extracting Only the Measurements on the Mean and Standard Deviation for Each Measurement
 
@@ -60,18 +59,17 @@ View(merged)
 colnames(features) <- c("Order", "Measurement")
 View(features)
 
-## Extracting variables that include the mean and the standard deviation
+## Extracting measurements that include the mean and the standard deviation
 
 mean_std_ext <- features$Measurement[grep("mean\\()|std\\()", features$Measurement)]
-View(mean_std_ext)
 
-## Creating a subsetting vector 
+## Creating a subsetting vector
+
 subsetting_variables <- c("Activity", "ParticipantNumber", as.character(mean_std_ext))
 
 ## Subsetting the data set
-merged_subset <- merged[, subsetting_variables]
 
-View(merged_subset)
+merged_subset <- merged[, subsetting_variables]
 
 # 03 Using Descriptive Activity Names to Name the Activities in the Data Set
 
@@ -96,7 +94,7 @@ names(merged_subset) <- gsub("^f", "frequency", names(merged_subset))
 
 # 05 Creating an Independent Tidy Data Set with the Average of Each Variable by Activity and Subject
 
-## Summarizing the data set: Calculating variable averages.  
+## Summarizing the data set: Calculating variable averages by Activity and ParticipantNumber (Subject).  
 
 tidy_data <-aggregate(. ~ Activity + ParticipantNumber, merged_subset, mean)
 
@@ -104,25 +102,10 @@ tidy_data <-aggregate(. ~ Activity + ParticipantNumber, merged_subset, mean)
 
 tidy_data <- tidy_data[order(tidy_data$Activity, tidy_data$ParticipantNumber), ]
 
-## Saving the tidy data set into a text file(r)
+## Saving the tidy data set into a text file
 
 write.table(tidy_data, file = "Tidy.txt", row.names = FALSE)
 
 # 06 Reading the Tidy Data Set
 
 tidy <- read.table("Tidy.txt")
-
-View(tidy)
-
-View(merged)
-
-View(merged_subset)
-
-View(tidy_data)
-
-View(features)
-
-View(subsetting_variables)
-
-View(merged_subset)
-
