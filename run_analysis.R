@@ -2,12 +2,16 @@
 
 ## Downloading Source Data Pack
 
+if (!file.exists("getdata")) {
+        dir.create("getdata")
+}
+
 fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
-download.file(fileUrl, destfile = "./getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip", method = "curl")
+download.file(fileUrl, destfile = "getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip", method = "curl")
 
 ## Unziping Source Data Pack
 
-unzip("./data/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
+unzip("getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
 
 ## Reading Relevant Data from Pack
 
@@ -21,22 +25,22 @@ features <- read.table("UCI HAR Dataset/features.txt")
 
 # 01 Merging the Training and the Test Sets to Create One Data Set
 
-## Adding Column Names to Activity Training and Test Data Frames
+## Adding column names to activity training and test data sets
 
 colnames(y_train) <- c("Activity")
 colnames(y_test) <- c("Activity")
 
-## Adding Column Names to Participant (Subject) Training and Test Data Frames
+## Adding column names to participant (Subject) training and test data sets
 
 colnames(subject_train) <- c("ParticipantNumber")
 colnames(subject_test) <- c("ParticipantNumber")
 
-## Adding Column Names to Measurements Training and Test Data Frames
+## Adding column names to measurement variables on training and test data sets using labels from the features data set
 
-colnames(x_train) <- t(features[2])
-colnames(x_test) <- t(features[2])
+colnames(x_train) <- features[, 2]
+colnames(x_test) <- features[, 2]
 
-## Merging Activity, Participant and Measurements Data Frames
+## Merging Activity, ParticipantNumber (Subject) and Measurements for training and test data sets
 
 x_train <- cbind(subject_train, x_train)
 x_train <- cbind(y_train, x_train)
@@ -44,68 +48,81 @@ x_train <- cbind(y_train, x_train)
 x_test <- cbind(subject_test, x_test)
 x_test <- cbind(y_test, x_test)
 
-## Merging Training and Test Sets to Create One
+## Merging training and test data sets to create one
 
 merged <- rbind(x_train, x_test)
+View(merged)
 
 # 02 Extracting Only the Measurements on the Mean and Standard Deviation for Each Measurement
 
-## Extracting the Mean Data Measurements
+## Naming the columns of the features data set
 
-### Extracting column numbers for the mean measurements
+colnames(features) <- c("Order", "Measurement")
+View(features)
 
-mean_ext <- grep("mean()", names(merged), value = FALSE)
+## Extracting variables that include the mean and the standard deviation
 
-### Subsetting the mean measurements using column numbers
+mean_std_ext <- features$Measurement[grep("mean\\()|std\\()", features$Measurement)]
+View(mean_std_ext)
 
-measurements_mean <- merged[mean_ext]
+## Creating a subsetting vector 
+subsetting_variables <- c("Activity", "ParticipantNumber", as.character(mean_std_ext))
 
-## Extracting Standard Deviation Measurements
+## Subsetting the data set
+merged_subset <- merged[, subsetting_variables]
 
-### Extracting column numbers for standard deviation measurements
-
-std_ext <- grep("std()", names(merged), value = FALSE)
-
-### Subsetting standard deviation measurements using using column numbers
-
-measurements_std <- merged[std_ext]
+View(merged_subset)
 
 # 03 Using Descriptive Activity Names to Name the Activities in the Data Set
 
-## Replacing the 6 Activity Code Numbers with Descriptive Names
+## Replacing the 6 activity code numbers with descriptive names
 
-merged$Activity[merged$Activity == 1] <- c("Walking")
-merged$Activity[merged$Activity == 2] <- c("Walking Upstairs")
-merged$Activity[merged$Activity == 3] <- c("Walking Downstairs")
-merged$Activity[merged$Activity == 4] <- c("Sitting")
-merged$Activity[merged$Activity == 5] <- c("Standing")
-merged$Activity[merged$Activity == 6] <- c("Laying")
+merged_subset$Activity[merged_subset$Activity == 1] <- c("Walking")
+merged_subset$Activity[merged_subset$Activity == 2] <- c("Walking Upstairs")
+merged_subset$Activity[merged_subset$Activity == 3] <- c("Walking Downstairs")
+merged_subset$Activity[merged_subset$Activity == 4] <- c("Sitting")
+merged_subset$Activity[merged_subset$Activity == 5] <- c("Standing")
+merged_subset$Activity[merged_subset$Activity == 6] <- c("Laying")
 
 # 04 Appropriately Labelling the Data Set with Descriptive Variable Names
 
-## Replacing Abbreviations with Full Words for the Continuous Variables Names
+## Replacing abbreviations with full words for the quantitative variables names
 
-names(merged) <- gsub("Acc", "Accelerometer", names(merged))
-names(merged) <- gsub("Mag", "Magnitude", names(merged))
-names(merged) <- gsub("Gyro", "Gyroscope", names(merged))
-names(merged) <- gsub("^t", "time", names(merged))
-names(merged) <- gsub("^f", "frequency", names(merged))
+names(merged_subset) <- gsub("Acc", "Accelerometer", names(merged_subset))
+names(merged_subset) <- gsub("Mag", "Magnitude", names(merged_subset))
+names(merged_subset) <- gsub("Gyro", "Gyroscope", names(merged_subset))
+names(merged_subset) <- gsub("^t", "time", names(merged_subset))
+names(merged_subset) <- gsub("^f", "frequency", names(merged_subset))
 
 # 05 Creating an Independent Tidy Data Set with the Average of Each Variable by Activity and Subject
 
-## Summarizing Data Set: Calculating Variable Averages.  
+## Summarizing the data set: Calculating variable averages.  
 
-tidy_data <-aggregate(. ~ Activity + ParticipantNumber, merged, mean)
+tidy_data <-aggregate(. ~ Activity + ParticipantNumber, merged_subset, mean)
 
-## Sorting the Summary by Activity and ParticipantNumber (Subject)
+## Sorting the tidy data set by Activity and ParticipantNumber (Subject)
 
 tidy_data <- tidy_data[order(tidy_data$Activity, tidy_data$ParticipantNumber), ]
 
-## Saving the Tidy Data Set into a Text File
+## Saving the tidy data set into a text file(r)
 
 write.table(tidy_data, file = "Tidy.txt", row.names = FALSE)
 
 # 06 Reading the Tidy Data Set
 
 tidy <- read.table("Tidy.txt")
+
+View(tidy)
+
+View(merged)
+
+View(merged_subset)
+
+View(tidy_data)
+
+View(features)
+
+View(subsetting_variables)
+
+View(merged_subset)
 
