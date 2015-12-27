@@ -6,19 +6,19 @@ Download the source data files https://d396qusza40orc.cloudfront.net/getdata%2Fp
 
 Read project relevant files into the following objects:
 
-subject_train: data frame, 
-x_train: data frame, 
-y_train: data frame, 
-subject_test: data frame, 
-x_test: data frame, 
-y_test: data frame, 
-features: data frame, 
+subject_train: data frame, 7352 observations for the training data set and one variable with participant number.
+x_train: data frame, 7352 observations and 561 quantitative variables for the training data set measurements.
+y_train: data frame, 7352 observations for the training data set activity numbers.
+subject_test: data frame, 2947 observations for the testing data set and one variable with participant number.
+x_test: data frame, 2947 and 561 quantitative variables for the testing data set measurements.
+y_test: data frame, 2947 observations for the testing data set activity numbers. 
+features: data frame, 561 observations for the quantitative variables names.
 
 Step 01
 
 Merge training and test data frames to create a new merged object.
 
-merged: 10299 observations and 563 variables including 2 qualitative for activity and participant number and 561 quantitative for measurements.
+merged: data frame, 10299 observations and 563 variables including 2 qualitative for activity and participant number and 561 quantitative for measurements.
 
 Step 02
 
