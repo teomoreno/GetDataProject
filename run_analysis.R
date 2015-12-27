@@ -109,3 +109,4 @@ write.table(tidy_data, file = "Tidy.txt", row.names = FALSE)
 # 06 Reading the Tidy Data Set
 
 tidy <- read.table("Tidy.txt")
+
