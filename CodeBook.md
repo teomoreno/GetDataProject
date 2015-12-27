@@ -18,13 +18,13 @@ Step 01
 
 Merge training and test data frames to create a new merged object.
 
-merged: data frame, variables, observations.
+merged: 10299 observations and 563 variables including 2 qualitative for activity and participant number and 561 quantitative for measurements.
 
 Step 02
 
 Extract observations for the mean and the standard deviation variables to create a new subset object. 
 
-merged_subset: data frame, variables, observations
+merged_subset: data frame, 10299 observations and 68 variables including 2 qualitative for activity and participant number and 66 quantitative for mean and standard deviation measurements.
 
 Step 03
 
@@ -42,8 +42,7 @@ Step 05
 
 Summarize averages for the mean and the standard deviation by activity and participant, subject, into a tidy data set.
 
-tidy_data
-data frame, variables, observations
+tidy_data: data frame, 180 observations and 68 variables including 2 qualitative for activity and participant number and 66 quantitative for mean and standard deviation measurements.
 
 Step 06
 
