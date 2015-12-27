@@ -18,7 +18,7 @@ Step 01
 
 Merge training and test data frames to create a new merged object.
 
-merged: data frame, variables, observations
+merged: data frame, variables, observations.
 
 Step 02
 
@@ -30,22 +30,13 @@ Step 03
 
 Rename activity numbers with names.
 
-1: Walking
-2:  Walking Upstairs
-3: Walking Downstairs
-4: Sitting
-5: Standing
-6: Laying
+Walking for 1. Walking Upstairs for 2. Walking Downstairs for 3. Sitting for 4. Standing for 5. Laying for 6.
 
 Step 04
 
 Replace abbreviations with full words for the quantitative variables names.
 
-Acc: Accelerometer
-Mag: Magnitude
-Gyro: Gyroscope
-^t: time
-^f: frequency
+Acc with Accelerometer. Mag with Magnitude. Gyro with Gyroscope. ^t with time. ^f with frequency.   
 
 Step 05
 
