@@ -57,3 +57,4 @@ data frame, variables, observations
 Step 06
 
 Write the tidy object into the Tidy.text file deliverable.
+
